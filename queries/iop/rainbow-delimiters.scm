@@ -6,7 +6,7 @@
   "{" @delimiter
   "}" @delimiter @sentinel) @container
 
-(rpcs
+(rpc_block
   "{" @delimiter
   "}" @delimiter @sentinel) @container
 
@@ -21,3 +21,11 @@
 (module_block
   "{" @delimiter
   "}" @delimiter @sentinel) @container
+
+(snmp_rpc_block
+  "{" @delimiter
+  "}" @delimiter @sentinel) @container
+
+(parenthesized_expression
+  "(" @delimiter
+  ")" @delimiter @sentinel) @container
