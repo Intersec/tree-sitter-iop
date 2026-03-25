@@ -1,0 +1,21 @@
+{
+  "grammars": [
+    {
+      "name": "iop",
+      "camelCase": false,
+      "scope": "source.iop",
+      "injection-regex": "^iop$",
+      "file-types": ["iop"],
+      "highlights": "queries/iop/highlights.scm",
+      "path": "."
+    }
+  ],
+  "metadata": {
+    "version": "0.0.1",
+    "license": "MIT",
+    "description": "IOP grammar for tree-sitter",
+    "links": {
+      "repository": "https://github.com/ilan-schemoul/tree-sitter-iop"
+    }
+  }
+}

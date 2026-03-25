@@ -1,111 +1,161 @@
-(data_structure_type) @keyword.type
+; Keywords
 [
- "interface"
- "class"
- "struct"
- "enum"
- "typedef"
- "package"
- "in"
- "enum"
- "out"
- "throw"
- "module"
- "null"
- "void"
- "abstract"
- "local"
- "static"
+  "interface"
+  "class"
+  "struct"
+  "union"
+  "enum"
+  "typedef"
+  "package"
+  "module"
+  "snmpObj"
+  "snmpTbl"
+  "snmpIface"
 ] @keyword.type
 
 [
- "true"
- "false"
+  "in"
+  "out"
+  "throw"
+] @keyword
+
+[
+  "abstract"
+  "local"
+  "static"
+  "null"
+  "void"
+] @keyword.modifier
+
+[
+  "true"
+  "false"
 ] @boolean
 
 "import" @keyword.import
 
+; Modules / paths
 (path) @module
 
+; Numbers
 (number) @number
-
-(attribute "@" @attribute (identifier)? @attribute)
-
-(attribute_argument_list
-  (attribute_argument) @variable)
-
 (tag_number) @number
 
+; Attributes
+(attribute "@" @attribute (identifier)? @attribute)
+
+; Type specifiers
 (type_specifier) @punctuation.special
 
+; Comments
 (comment) @comment
+(doc_ref) @type
 
-(value) @value
+; Package
+(package_definition
+  (identifier) @module)
 
+; Enum
 (enum_definition
-  (identifier) @type
-(_))
+  "enum" @keyword.type
+  (identifier) @type)
 
+(enum_field
+  (identifier) @constant)
+
+; Default values
 (default_value
-    (identifier) @variable)
+  (value
+    (identifier) @variable))
 
-(enum_block
-  (enum_field
-    (identifier) @constant))
-
+; Structs / Unions
 (data_structure_definition
-  (identifier) @type
-(_))
+  (identifier) @type)
 
+; Classes
 (class_definition
-  (identifier) @type
-(_))
+  "class" @keyword.type
+  (identifier) @type)
 
+(class_inheritance
+  (identifier) @type)
+
+; Interface
 (interface_definition
-  (identifier) @type
-(_))
+  "interface" @keyword.type
+  (identifier) @type)
 
-(enum_block
-  (enum_field
-    (identifier) @constant))
+; RPCs
+(rpc
+  (identifier) @function)
 
+(rpc_in (identifier) @type)
+(rpc_out (identifier) @type)
+(rpc_throw (identifier) @type)
+
+; Arguments
 (argument_list (variable
-  (_)
   (identifier) @variable.parameter))
 
-(rpc_throw
-  (identifier) @variable.parameter)
+; SNMP
+(snmp_object_definition
+  (identifier) @type)
 
-(rpc
-  (identifier) @type
-  (_))
+(snmp_table_definition
+  (identifier) @type)
 
-[
- "="
-] @operator
-(operator) @operator
+(snmp_interface_definition
+  (identifier) @type)
 
-[
-  "{"
-  "}"
-] @punctuation.bracket
+(snmp_rpc
+  (identifier) @function)
 
-[
-  ";"
-  ":"
-  ","
-] @punctuation.delimiter
+; Module definition
+(module_definition
+  "module" @keyword.type
+  (identifier) @type)
+
+(module_inheritance
+  (identifier) @type)
 
 (module_block
   (module_field
     (identifier) @type
     (identifier) @variable.parameter))
 
-(module_definition
-  (identifier) @type
-  (_
-    (identifier) @type))
+; Operators
+[
+  "="
+] @operator
+(operator) @operator
 
+; Brackets
+[
+  "{"
+  "}"
+] @punctuation.bracket
+
+[
+  "("
+  ")"
+] @punctuation.bracket
+
+; Delimiters
+[
+  ";"
+  ":"
+  ","
+] @punctuation.delimiter
+
+; Types (last so specific captures above take priority in same-specificity cases)
 (type) @type
 
+; Strings
 (string) @string
+(char_literal) @string
+
+; Typedef
+(typedef_definition
+  "typedef" @keyword.type
+  (variable
+    (identifier) @type))

@@ -8,6 +8,14 @@
       "required": false,
       "types": [
         {
+          "type": "attribute",
+          "named": true
+        },
+        {
+          "type": "tag",
+          "named": true
+        },
+        {
           "type": "variable",
           "named": true
         }
@@ -34,42 +42,30 @@
     }
   },
   {
-    "type": "attribute_argument",
+    "type": "attribute_argument_list",
     "named": true,
     "fields": {},
     "children": {
-      "multiple": true,
-      "required": true,
+      "multiple": false,
+      "required": false,
       "types": [
         {
-          "type": "attribute_identifier",
-          "named": true
-        },
-        {
-          "type": "default_value",
-          "named": true
-        },
-        {
-          "type": "number",
-          "named": true
-        },
-        {
-          "type": "string",
+          "type": "attribute_content",
           "named": true
         }
       ]
     }
   },
   {
-    "type": "attribute_argument_list",
+    "type": "char_literal",
     "named": true,
     "fields": {},
     "children": {
-      "multiple": true,
-      "required": false,
+      "multiple": false,
+      "required": true,
       "types": [
         {
-          "type": "attribute_argument",
+          "type": "string",
           "named": true
         }
       ]
@@ -83,6 +79,10 @@
       "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "attribute",
+          "named": true
+        },
         {
           "type": "class_inheritance",
           "named": true
@@ -127,6 +127,22 @@
     "fields": {}
   },
   {
+    "type": "comment",
+    "named": true,
+    "extra": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "doc_ref",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "constant",
     "named": true,
     "fields": {}
@@ -159,6 +175,10 @@
       "required": true,
       "types": [
         {
+          "type": "attribute",
+          "named": true
+        },
+        {
           "type": "data_structure_block",
           "named": true
         },
@@ -187,10 +207,6 @@
       "required": true,
       "types": [
         {
-          "type": "identifier",
-          "named": true
-        },
-        {
           "type": "value",
           "named": true
         }
@@ -206,10 +222,6 @@
       "required": false,
       "types": [
         {
-          "type": "attribute",
-          "named": true
-        },
-        {
           "type": "enum_field",
           "named": true
         }
@@ -224,6 +236,10 @@
       "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "attribute",
+          "named": true
+        },
         {
           "type": "enum_block",
           "named": true
@@ -243,6 +259,10 @@
       "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "attribute",
+          "named": true
+        },
         {
           "type": "default_value",
           "named": true
@@ -310,11 +330,15 @@
       "required": true,
       "types": [
         {
+          "type": "attribute",
+          "named": true
+        },
+        {
           "type": "identifier",
           "named": true
         },
         {
-          "type": "rpcs",
+          "type": "rpc_block",
           "named": true
         }
       ]
@@ -343,6 +367,10 @@
       "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "attribute",
+          "named": true
+        },
         {
           "type": "identifier",
           "named": true
@@ -418,6 +446,37 @@
     }
   },
   {
+    "type": "parenthesized_expression",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "constant",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "number",
+          "named": true
+        },
+        {
+          "type": "operator",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "rpc",
     "named": true,
     "fields": {},
@@ -443,6 +502,25 @@
         },
         {
           "type": "rpc_throw",
+          "named": true
+        },
+        {
+          "type": "tag",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "rpc_block",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "rpc",
           "named": true
         }
       ]
@@ -495,6 +573,10 @@
       "required": true,
       "types": [
         {
+          "type": "argument_list",
+          "named": true
+        },
+        {
           "type": "identifier",
           "named": true
         }
@@ -502,7 +584,88 @@
     }
   },
   {
-    "type": "rpcs",
+    "type": "snmp_interface_definition",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "attribute",
+          "named": true
+        },
+        {
+          "type": "class_inheritance",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "snmp_rpc_block",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "snmp_object_definition",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "attribute",
+          "named": true
+        },
+        {
+          "type": "class_inheritance",
+          "named": true
+        },
+        {
+          "type": "data_structure_block",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "snmp_rpc",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "attribute",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "snmp_rpc_in",
+          "named": true
+        },
+        {
+          "type": "tag",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "snmp_rpc_block",
     "named": true,
     "fields": {},
     "children": {
@@ -510,7 +673,49 @@
       "required": false,
       "types": [
         {
-          "type": "rpc",
+          "type": "snmp_rpc",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "snmp_rpc_in",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "snmp_table_definition",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "attribute",
+          "named": true
+        },
+        {
+          "type": "class_inheritance",
+          "named": true
+        },
+        {
+          "type": "data_structure_block",
+          "named": true
+        },
+        {
+          "type": "identifier",
           "named": true
         }
       ]
@@ -519,15 +724,12 @@
   {
     "type": "source_file",
     "named": true,
+    "root": true,
     "fields": {},
     "children": {
       "multiple": true,
       "required": false,
       "types": [
-        {
-          "type": "attribute",
-          "named": true
-        },
         {
           "type": "class_definition",
           "named": true
@@ -554,6 +756,18 @@
         },
         {
           "type": "package_definition",
+          "named": true
+        },
+        {
+          "type": "snmp_interface_definition",
+          "named": true
+        },
+        {
+          "type": "snmp_object_definition",
+          "named": true
+        },
+        {
+          "type": "snmp_table_definition",
           "named": true
         },
         {
@@ -618,9 +832,13 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": false,
+      "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "attribute",
+          "named": true
+        },
         {
           "type": "variable",
           "named": true
@@ -637,7 +855,15 @@
       "required": true,
       "types": [
         {
+          "type": "char_literal",
+          "named": true
+        },
+        {
           "type": "constant",
+          "named": true
+        },
+        {
+          "type": "identifier",
           "named": true
         },
         {
@@ -646,6 +872,10 @@
         },
         {
           "type": "operator",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
           "named": true
         },
         {
@@ -707,6 +937,10 @@
     "named": false
   },
   {
+    "type": "*/",
+    "named": false
+  },
+  {
     "type": "+",
     "named": false
   },
@@ -720,6 +954,10 @@
   },
   {
     "type": "/",
+    "named": false
+  },
+  {
+    "type": "/*",
     "named": false
   },
   {
@@ -759,7 +997,7 @@
     "named": false
   },
   {
-    "type": "attribute_identifier",
+    "type": "attribute_content",
     "named": true
   },
   {
@@ -775,11 +1013,15 @@
     "named": false
   },
   {
+    "type": "c",
+    "named": false
+  },
+  {
     "type": "class",
     "named": false
   },
   {
-    "type": "comment",
+    "type": "doc_ref",
     "named": true
   },
   {
@@ -847,6 +1089,18 @@
     "named": false
   },
   {
+    "type": "snmpIface",
+    "named": false
+  },
+  {
+    "type": "snmpObj",
+    "named": false
+  },
+  {
+    "type": "snmpTbl",
+    "named": false
+  },
+  {
     "type": "static",
     "named": false
   },
@@ -911,7 +1165,15 @@
     "named": false
   },
   {
+    "type": "|",
+    "named": false
+  },
+  {
     "type": "}",
+    "named": false
+  },
+  {
+    "type": "~",
     "named": false
   }
 ]

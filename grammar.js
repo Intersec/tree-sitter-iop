@@ -6,6 +6,10 @@ module.exports = grammar({
     $.comment,
   ],
 
+  externals: $ => [
+    $._block_comment_content,
+  ],
+
   rules: {
 
     source_file: $ => repeat(choice(
@@ -13,13 +17,14 @@ module.exports = grammar({
       $.typedef_definition,
       $.import_definition,
 
-      $.attribute,
-
       $.module_definition,
       $.data_structure_definition,
       $.class_definition,
       $.enum_definition,
       $.interface_definition,
+      $.snmp_object_definition,
+      $.snmp_table_definition,
+      $.snmp_interface_definition,
     )),
 
     package_definition: $ => seq(
@@ -29,6 +34,7 @@ module.exports = grammar({
     ),
 
     typedef_definition: $ => seq(
+      repeat($.attribute),
       "typedef",
       $.variable,
       ";"
@@ -43,6 +49,7 @@ module.exports = grammar({
     path: $ => /[a-zA-Z][a-zA-Z0-9_.*]*/,
 
     module_definition: $ => seq(
+      repeat($.attribute),
       "module",
       $.identifier,
       optional($.module_inheritance),
@@ -50,13 +57,11 @@ module.exports = grammar({
       optional(";"),
     ),
 
-
     module_inheritance: $ => seq(
       ":",
       repeat(seq($.identifier, ",")),
       $.identifier,
     ),
-
 
     module_block: $ => seq(
       "{",
@@ -72,6 +77,7 @@ module.exports = grammar({
     ),
 
     enum_definition: $ => seq(
+      repeat($.attribute),
       "enum",
       $.identifier,
       $.enum_block,
@@ -80,12 +86,12 @@ module.exports = grammar({
 
     enum_block: $ => seq(
       "{",
-      repeat(choice($.attribute, seq($.enum_field, ","))),
+      repeat(seq($.enum_field, ",")),
       "}",
-
     ),
 
     enum_field: $ => seq(
+      repeat($.attribute),
       optional($.tag),
       $.identifier,
       optional($.default_value),
@@ -93,25 +99,26 @@ module.exports = grammar({
 
     default_value: $ => seq(
       "=",
-      choice($.identifier, $.value),
+      $.value,
     ),
 
     interface_definition: $ => seq(
+      repeat($.attribute),
       "interface",
       $.identifier,
-      $.rpcs,
-      optional(";"),
+      $.rpc_block,
     ),
 
-    rpcs: $ => seq(
+    rpc_block: $ => seq(
       "{",
       repeat($.rpc),
       "}",
-      ";",
+      optional(";"),
     ),
 
     rpc: $ => seq(
       repeat($.attribute),
+      optional($.tag),
       $.identifier,
       optional($.rpc_in),
       optional($.rpc_out),
@@ -131,17 +138,18 @@ module.exports = grammar({
 
     rpc_throw: $ => seq(
       "throw",
-      $.identifier,
+      choice($.argument_list, $.identifier),
     ),
 
     argument_list: $ => seq(
       "(",
-      repeat(seq($.variable, ",")),
-      optional($.variable),
+      repeat(seq(repeat($.attribute), optional($.tag), $.variable, ",")),
+      optional(seq(repeat($.attribute), optional($.tag), $.variable)),
       ")"
     ),
 
     class_definition: $ => seq(
+      repeat($.attribute),
       repeat($.class_modifier),
       "class",
       $.identifier,
@@ -160,6 +168,7 @@ module.exports = grammar({
     ),
 
     data_structure_definition: $ => seq(
+      repeat($.attribute),
       $.data_structure_type,
       $.identifier,
       $.data_structure_block,
@@ -219,7 +228,29 @@ module.exports = grammar({
       "[]",
     ),
 
-    value: $ => choice($.string, repeat1(choice($.number, $.operator, $.constant))),
+    value: $ => choice(
+      $.string,
+      $.char_literal,
+      repeat1(choice(
+        $.number,
+        $.identifier,
+        $.operator,
+        $.constant,
+        $.parenthesized_expression,
+      )),
+    ),
+
+    parenthesized_expression: $ => seq(
+      "(",
+      repeat1(choice(
+        $.number,
+        $.identifier,
+        $.operator,
+        $.constant,
+        $.parenthesized_expression,
+      )),
+      ")",
+    ),
 
     string: $ => seq(
       '"',
@@ -227,7 +258,12 @@ module.exports = grammar({
       '"',
     ),
 
-    string_content: _ => /[^"]*?/,
+    string_content: _ => /[^"\\]*(\\.([^"\\]*)?)*/,
+
+    char_literal: $ => seq(
+      'c',
+      $.string,
+    ),
 
     number: $ => choice(
       /-?[0-9]*\.[0-9]+([eE][+-]?[0-9]+)?/,
@@ -243,6 +279,9 @@ module.exports = grammar({
       "+",
       "-",
       "/",
+      "&",
+      "|",
+      "~",
     ),
 
     constant: $ => choice(
@@ -250,14 +289,62 @@ module.exports = grammar({
       "false",
     ),
 
-    tag_number: $ => /[0-9]+/,
+    tag_number: $ => /0x[0-9a-fA-F]+|[0-9]+/,
 
     tag: $ => seq(
       $.tag_number,
       ":",
     ),
 
-    identifier: $ => /[a-zA-Z][.a-zA-Z0-9_.]*/,
+    identifier: $ => /[a-zA-Z][.a-zA-Z0-9_]*/,
+
+    // SNMP definitions
+    snmp_object_definition: $ => seq(
+      repeat($.attribute),
+      "snmpObj",
+      $.identifier,
+      repeat($.class_inheritance),
+      $.data_structure_block,
+    ),
+
+    snmp_table_definition: $ => seq(
+      repeat($.attribute),
+      "snmpTbl",
+      $.identifier,
+      repeat($.class_inheritance),
+      $.data_structure_block,
+    ),
+
+    snmp_interface_definition: $ => seq(
+      repeat($.attribute),
+      "snmpIface",
+      $.identifier,
+      repeat($.class_inheritance),
+      $.snmp_rpc_block,
+    ),
+
+    snmp_rpc_block: $ => seq(
+      "{",
+      repeat($.snmp_rpc),
+      "}",
+      optional(";"),
+    ),
+
+    snmp_rpc: $ => seq(
+      repeat($.attribute),
+      optional($.tag),
+      $.identifier,
+      optional($.snmp_rpc_in),
+      ";",
+    ),
+
+    snmp_rpc_in: $ => seq(
+      "in",
+      "(",
+      repeat(seq($.identifier, ",")),
+      optional($.identifier),
+      ")",
+    ),
 
     attribute: $ => seq(
       "@",
@@ -270,30 +357,39 @@ module.exports = grammar({
 
     attribute_argument_list: $ => seq(
       "(",
-      repeat(seq($.attribute_argument, ",")),
-      optional($.attribute_argument),
+      optional($.attribute_content),
       ")"
     ),
 
-    attribute_argument: $ => choice(
-      seq(
-        $.attribute_identifier,
-        optional($.default_value),
-      ),
-      $.string,
-      $.number,
-    ),
+    // Flexible attribute content: handles quoted strings (opaque, parens inside
+    // don't need balancing) and up to two levels of explicit paren nesting.
+    attribute_content: _ => /([^()"\\]|\\.|"([^"\\]|\\.)*"|\(([^()"\\]|\\.|"([^"\\]|\\.)*"|\(([^()"\\]|\\.|"([^"\\]|\\.)*")*\))*\))*/,
 
-    attribute_identifier: _ => /[a-zA-Z][a-zA-Z0-9_.:]*/,
-
-    comment: _ => token(choice(
-      seq('//', /(\\+(.|\r?\n)|[^\\\n])*/),
+    // Structured comment with doc_ref support.
+    // doc_ref is a single token (token.immediate) that matches the
+    // complete sequence \tag identifier.  It has higher precedence
+    // than the catch-all patterns so the lexer prefers it.
+    comment: $ => choice(
+      // Line comment (single token — doc_ref only in block comments)
+      token(seq('//', /[^\n]*/)),
+      // Block comment
       seq(
         '/*',
-        /[^*]*\*+([^/*][^*]*\*+)*/,
-        '/',
+        repeat(choice(
+          $.doc_ref,
+          token.immediate(prec(-1, /\\[^\n]/)),
+          token.immediate(/\\/),
+          $._block_comment_content,
+        )),
+        token.immediate('*/'),
       ),
-    )),
+    ),
+
+    doc_ref: $ => token.immediate(prec(1, seq(
+      '\\',
+      choice('p', 'ref', 'see', 'a', 'c', 'class', 'struct', 'enum', 'typedef', 'union'),
+      /[ \t]+/,
+      /[a-zA-Z][.a-zA-Z0-9_]*/,
+    ))),
   }
 });
-

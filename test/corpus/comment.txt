@@ -1,0 +1,240 @@
+================================================================================
+Line comment
+================================================================================
+
+// this is a comment
+struct A { int a; };
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (comment)
+  (data_structure_definition
+    (data_structure_type)
+    (identifier)
+    (data_structure_block
+      (field
+        (variable
+          (type)
+          (identifier))))))
+
+================================================================================
+Block comment
+================================================================================
+
+/* this is a block comment */
+struct A { int a; };
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (comment)
+  (data_structure_definition
+    (data_structure_type)
+    (identifier)
+    (data_structure_block
+      (field
+        (variable
+          (type)
+          (identifier))))))
+
+================================================================================
+Multi-line block comment
+================================================================================
+
+/**
+ * This is a multi-line
+ * documentation comment.
+ */
+struct A { int a; };
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (comment)
+  (data_structure_definition
+    (data_structure_type)
+    (identifier)
+    (data_structure_block
+      (field
+        (variable
+          (type)
+          (identifier))))))
+
+================================================================================
+Line comment with doc ref
+================================================================================
+
+// Use \p GridSquare for geo lookups
+struct A { int a; };
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (comment)
+  (data_structure_definition
+    (data_structure_type)
+    (identifier)
+    (data_structure_block
+      (field
+        (variable
+          (type)
+          (identifier))))))
+
+================================================================================
+Block comment with doc ref
+================================================================================
+
+/* See \ref geoutils.GridSquare for details */
+struct A { int a; };
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (comment
+    (doc_ref))
+  (data_structure_definition
+    (data_structure_type)
+    (identifier)
+    (data_structure_block
+      (field
+        (variable
+          (type)
+          (identifier))))))
+
+================================================================================
+Multi-line block comment with multiple doc refs
+================================================================================
+
+/**
+ * Convert \p LatLon to \p GridSquare using
+ * \ref geoutils.convert for the transformation.
+ */
+struct A { int a; };
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (comment
+    (doc_ref)
+    (doc_ref)
+    (doc_ref))
+  (data_structure_definition
+    (data_structure_type)
+    (identifier)
+    (data_structure_block
+      (field
+        (variable
+          (type)
+          (identifier))))))
+
+================================================================================
+Comment with doc ref mixed with regular text
+================================================================================
+
+// Initialize \p Config then call \see setup.init to start
+struct A { int a; };
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (comment)
+  (data_structure_definition
+    (data_structure_type)
+    (identifier)
+    (data_structure_block
+      (field
+        (variable
+          (type)
+          (identifier))))))
+
+================================================================================
+Banner comment with stars
+================================================================================
+
+/******************************************************************************/
+struct A { int a; };
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (comment)
+  (data_structure_definition
+    (data_structure_type)
+    (identifier)
+    (data_structure_block
+      (field
+        (variable
+          (type)
+          (identifier))))))
+
+================================================================================
+Comment between tag and field
+================================================================================
+
+struct A {
+  0: /* field comment */ int a;
+};
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (data_structure_definition
+    (data_structure_type)
+    (identifier)
+    (data_structure_block
+      (field
+        (tag
+          (tag_number))
+        (comment)
+        (variable
+          (type)
+          (identifier))))))
+
+================================================================================
+Comment between enum values
+================================================================================
+
+enum E {
+  /* first value */
+  A,
+  /* second value */
+  B,
+};
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (enum_definition
+    (identifier)
+    (enum_block
+      (comment)
+      (enum_field
+        (identifier))
+      (comment)
+      (enum_field
+        (identifier)))))
+
+================================================================================
+Comment between RPCs
+================================================================================
+
+interface I {
+  /* first rpc */
+  foo;
+  /* second rpc */
+  bar;
+};
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (interface_definition
+    (identifier)
+    (rpc_block
+      (comment)
+      (rpc
+        (identifier))
+      (comment)
+      (rpc
+        (identifier)))))
