@@ -15,7 +15,7 @@
     "license": "MIT",
     "description": "IOP grammar for tree-sitter",
     "links": {
-      "repository": "https://github.com/ilan-schemoul/tree-sitter-iop"
+      "repository": "https://github.com/Intersec/tree-sitter-iop"
     }
   }
 }
